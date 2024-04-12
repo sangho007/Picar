@@ -2,6 +2,9 @@ import math
 import matplotlib.pyplot as plt
 import numpy as np
 from move import DCMotor,ServoMotor
+from get_image_scp_class import ColorDetector
+import threading
+
 import time 
 
 
@@ -213,12 +216,20 @@ def main():
     # create vehicle
     ego = Vehicle(20, 75, 0)
     
+    
+    # motor, servo init 
     move = DCMotor()
-    move.setup()
     servo = ServoMotor()
+    move.setup()
     servo.setup()
     
-
+    # colotdetector init 
+    color_detector = ColorDetector()
+    
+    t_color_detect = threading.Thread(target=color_detector.detect_colors)
+    t_color_detect.daemon = True
+    t_color_detect.start()
+    
     # target velocity
     target_vel = 20
     opt_path=[[20.0, 75.0, 0.0], [21.0, 75.0, 0.0], [22.0, 75.0, 0.0], [23.0, 75.0, 0.0], [24.0, 75.0, 0.0], [25.0, 75.0, 0.0],
@@ -397,20 +408,20 @@ def main():
     # real trajectory
     traj_ego_x = []
     traj_ego_y = []
-
-    # plt.figure(figsize=(12, 8))
-    while getDistance([ego.x, ego.y], goal) > 1:
-        target_point = traj.getTargetPoint([ego.x, ego.y])
+    
+    while getDistance([color_detector.ego_x, color_detector.ego_y], goal) > 1:
+        color_detector.ego_x
+        target_point = traj.getTargetPoint([color_detector.ego_x, color_detector.ego_y])
 
         # use PID to control the vehicle
         vel_err = target_vel - ego.vel
         speed = vel_err
 
-        yaw_err = math.atan2(target_point[1] - ego.y, target_point[0] - ego.x) - ego.yaw
-        if yaw_err < 0 and ego.yaw > 0:
+        yaw_err = math.atan2(target_point[1] - color_detector.ego_y, target_point[0] - color_detector.ego_x) - color_detector.yaw
+        if yaw_err < 0 and color_detector.yaw > 0:
             #후진 상황
-            ego.yaw = -ego.yaw
-            yaw_err = math.atan2(target_point[1] - ego.y, target_point[0] - ego.x) - ego.yaw
+            color_detector.yaw = -color_detector.yaw
+            yaw_err = math.atan2(target_point[1] - color_detector.ego_y, target_point[0] - color_detector.ego_x) - color_detector.yaw
         # acc = PI_acc.control(vel_err)
        
         delta = PI_yaw.control(yaw_err)
@@ -423,12 +434,38 @@ def main():
         ego.update(speed, delta)
 
         # store the trajectory
-        traj_ego_x.append(ego.x)
-        traj_ego_y.append(ego.y)
+        traj_ego_x.append(color_detector.ego_x)
+        traj_ego_y.append(color_detector.ego_y)
         time.sleep(0.3)
+        
+    # while getDistance([ego.x, ego.y], goal) > 1:
+    #     color_detector.ego_x
+    #     target_point = traj.getTargetPoint([ego.x, ego.y])
 
+    #     # use PID to control the vehicle
+    #     vel_err = target_vel - ego.vel
+    #     speed = vel_err
+
+    #     yaw_err = math.atan2(target_point[1] - ego.y, target_point[0] - ego.x) - ego.yaw
+    #     if yaw_err < 0 and ego.yaw > 0:
+    #         #후진 상황
+    #         ego.yaw = -ego.yaw
+    #         yaw_err = math.atan2(target_point[1] - ego.y, target_point[0] - ego.x) - ego.yaw
+    #     # acc = PI_acc.control(vel_err)
+       
+    #     delta = PI_yaw.control(yaw_err)
+
+    #     move.move(speed)
+    #     servo.angle_control(delta)
         
 
+    #     # move the vehicle
+    #     ego.update(speed, delta)
+
+    #     # store the trajectory
+    #     traj_ego_x.append(ego.x)
+    #     traj_ego_y.append(ego.y)
+    #     time.sleep(0.3)
 
 if __name__ == "__main__":
     main()
