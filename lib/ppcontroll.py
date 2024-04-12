@@ -413,7 +413,7 @@ def main():
         move.move(acc)
         move.yaw_controll(delta)
         print(move.servo_tick)
-        move.angle_control()
+        move.angle_control(move.servo_tick)
 
         # move the vehicle
         ego.update(acc, delta)
