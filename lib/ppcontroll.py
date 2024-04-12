@@ -213,6 +213,7 @@ def main():
     ego = Vehicle(20, 75, 0)
     
     move = VehicleMove()
+    move.setup()
     
     # plotVehicle(ego.x, ego.y, ego.yaw)
 
