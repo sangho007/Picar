@@ -195,10 +195,10 @@ class ColorDetector:
                     yaw_result = math.atan2(self.cy_red - self.cy_green, self.cx_green - self.cx_red)
                     if yaw_result > math.pi:
                         yaw_result -= 2 * math.pi
-                    # print("Heading Angle in transformed image: {:.2f} radians".format(yaw_result))
-                    # print("Red center in transformed image - x: {}, y: {}".format(self.cx_red, self.cy_red))
-                    # print("Green center in transformed image - x: {}, y: {}".format(self.cx_green, self.cy_green))
-                    # print('')
+                    print("Heading Angle in transformed image: {:.2f} radians".format(yaw_result))
+                    print("Red center in transformed image - x: {}, y: {}".format(self.cx_red, self.cy_red))
+                    print("Green center in transformed image - x: {}, y: {}".format(self.cx_green, self.cy_green))
+                    print('')
 
                     #eGo x,y 계산
                     self.ego_x = (self.cx_red + self.cx_green)/2
