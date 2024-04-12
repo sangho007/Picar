@@ -278,7 +278,7 @@ def main():
         delta = PI_yaw.control(yaw_err)
 
         print(speed,delta)
-        move.move(25)
+        move.move(0)
         servo.angle_control(delta)
 
         # move the vehicle
