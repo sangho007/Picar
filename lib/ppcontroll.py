@@ -1,6 +1,7 @@
 import math
 import matplotlib.pyplot as plt
 import numpy as np
+from move import VehicleMove
 
 
 L = 5  # look ahead distance
@@ -210,6 +211,9 @@ class PI:
 def main():
     # create vehicle
     ego = Vehicle(20, 75, 0)
+    
+    move = VehicleMove()
+    
     # plotVehicle(ego.x, ego.y, ego.yaw)
 
     # target velocity
@@ -406,7 +410,10 @@ def main():
         acc = PI_acc.control(vel_err)
         delta = PI_yaw.control(yaw_err)
 
-        
+        move.move(acc)
+        move.yaw_controll(delta)
+        print(move.servo_tick)
+        # move.angle_control()
 
         # move the vehicle
         ego.update(acc, delta)

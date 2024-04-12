@@ -57,8 +57,8 @@ class VehicleMove:
             speed = 0
         self.pwm_A.ChangeDutyCycle(speed)
 
-    def angle_control(self,servo_tick):
-        self.pwm.set_pwm(0, 0, servo_tick)
+    def angle_control(self):
+        self.pwm.set_pwm(0, 0, self.servo_tick)
         
     def yaw_controll(self,error):
         RIGHT_MAX = 230
