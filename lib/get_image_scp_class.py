@@ -66,8 +66,12 @@ class ColorDetector:
         self.cy_green = None
         self.cx_red = None
         self.cy_red = None
-        self.yaw = None
         self.blue_centers = []
+        
+        self.ego_x = None
+        self.ego_y = None
+        self.ego_yaw = None
+        
         
     def apply_CLAHE(self,bgr_img):
         lab_img = cv2.cvtColor(bgr_img,cv2.COLOR_BGR2Lab)
@@ -186,7 +190,7 @@ class ColorDetector:
                     # result 이미지에서 빨간색과 초록색 중심을 잇는 파란색 선 그리기
                     cv2.line(result, (self.cx_red, self.cy_red), (self.cx_green, self.cy_green), (255, 0, 0), 2)
 
-                    # result 이미지에서의 yaw 계산
+                    # result 이미지에서의 ego_yaw 계산
                     yaw_result = math.atan2(self.cy_red - self.cy_green, self.cx_green - self.cx_red)
                     if yaw_result > math.pi:
                         yaw_result -= 2 * math.pi
@@ -195,6 +199,9 @@ class ColorDetector:
                     print("Green center in transformed image - x: {}, y: {}".format(self.cx_green, self.cy_green))
                     print('')
 
+                    #eGo x,y 계산
+                    self.ego_x = (self.cx_red + self.cx_green)/2
+                    self.ego_y = (self.cy_red + self.cy_green)/2
                 # ...
 
                 # result 이미지에 path.txt의 점들을 빨간색으로 그리기
@@ -213,10 +220,10 @@ class ColorDetector:
             if moments_red_result["m00"] != 0 and moments_green_result["m00"] != 0:
                 cv2.line(calibrated_image, (self.cx_red, self.cy_red), (self.cx_green, self.cy_green), (255, 0, 0), 2)
 
-                self.yaw = math.atan2(self.cy_red - self.cy_green, self.cx_green - self.cx_red)
-                if self.yaw > math.pi:
-                    self.yaw -= 2 * math.pi
-                print("Heading Angle: {:.2f} radians".format(self.yaw))
+                self.ego_yaw = math.atan2(self.cy_red - self.cy_green, self.cx_green - self.cx_red)
+                if self.ego_yaw > math.pi:
+                    self.ego_yaw -= 2 * math.pi
+                print("Heading Angle: {:.2f} radians".format(self.ego_yaw))
                 print('')
 
             cv2.imshow("Frame", calibrated_image)
@@ -227,7 +234,7 @@ class ColorDetector:
         cv2.destroyAllWindows()
         
     def get_yaw(self):
-        return self.yaw
+        return self.ego_yaw
     
     def get_blue_centers(self):
         return self.blue_centers
@@ -238,5 +245,5 @@ if __name__ == '__main__':
     # 사용 예시
     detector = ColorDetector('192.168.0.5', 'pi', 'raspberry')
     detector.detect_colors()
-    yaw = detector.get_yaw()
+    ego_yaw = detector.get_yaw()
     blue_centers = detector.get_blue_centers()

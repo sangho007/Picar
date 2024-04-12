@@ -210,10 +210,10 @@ class PI:
 def main():
     # create vehicle
     ego = Vehicle(20, 75, 0)
-    plotVehicle(ego.x, ego.y, ego.yaw)
+    # plotVehicle(ego.x, ego.y, ego.yaw)
 
     # target velocity
-    target_vel = 10
+    target_vel = 20
     opt_path=[[20.0, 75.0, 0.0], [21.0, 75.0, 0.0], [22.0, 75.0, 0.0], [23.0, 75.0, 0.0], [24.0, 75.0, 0.0], [25.0, 75.0, 0.0],
      [26.0, 75.0, 0.0], [27.0, 75.0, 0.0], [28.0, 75.0, 0.0], [29.0, 75.0, 0.0], [30.0, 75.0, 0.0], [31.0, 75.0, 0.0],
      [32.0, 75.0, 0.0], [33.0, 75.0, 0.0], [34.0, 75.0, 0.0], [35.0, 75.0, 0.0], [36.0, 75.0, 0.0], [37.0, 75.0, 0.0],
@@ -374,12 +374,12 @@ def main():
      [224.99999999999997, 27.783113774328783, 1.5707963267948966],
      [224.99999999999997, 26.783113774328783, 1.5707963267948966],
      [224.99999999999997, 25.783113774328783, 1.5707963267948966], [224.99999999999997, 25.0, 1.5707963267948966]]
+    
     opt_path = np.array(opt_path)
     # target course
     traj_x = [sublist[0] for sublist in opt_path]
     traj_y = [sublist[1] for sublist in opt_path]
-    # traj_x = np.arange(0, 100, 0.5)
-    # traj_y = [math.sin(x / 10.0) * x / 2.0 for x in traj_x]
+    
     traj = Trajectory(traj_x, traj_y)
     goal = traj.getPoint(len(traj_x) - 1)
 
@@ -391,7 +391,7 @@ def main():
     traj_ego_x = []
     traj_ego_y = []
 
-    plt.figure(figsize=(12, 8))
+    # plt.figure(figsize=(12, 8))
     while getDistance([ego.x, ego.y], goal) > 1:
         target_point = traj.getTargetPoint([ego.x, ego.y])
 
@@ -406,6 +406,8 @@ def main():
         acc = PI_acc.control(vel_err)
         delta = PI_yaw.control(yaw_err)
 
+        
+
         # move the vehicle
         ego.update(acc, delta)
 
@@ -413,18 +415,18 @@ def main():
         traj_ego_x.append(ego.x)
         traj_ego_y.append(ego.y)
 
-        # plots
-        plt.cla()
-        plt.plot(traj_x, traj_y, "-r", linewidth=5, label="course")
-        plt.plot(traj_ego_x, traj_ego_y, "-b", linewidth=2, label="trajectory")
-        plt.plot(target_point[0], target_point[1], "og", ms=5, label="target point")
-        plotVehicle(ego.x, ego.y, ego.yaw, delta)
-        plt.xlabel("x[m]")
-        plt.ylabel("y[m]")
-        plt.axis("equal")
-        plt.legend()
-        plt.grid(True)
-        plt.pause(0.1)
+        # # plots
+        # plt.cla()
+        # plt.plot(traj_x, traj_y, "-r", linewidth=5, label="course")
+        # plt.plot(traj_ego_x, traj_ego_y, "-b", linewidth=2, label="trajectory")
+        # plt.plot(target_point[0], target_point[1], "og", ms=5, label="target point")
+        # plotVehicle(ego.x, ego.y, ego.yaw, delta)
+        # plt.xlabel("x[m]")
+        # plt.ylabel("y[m]")
+        # plt.axis("equal")
+        # plt.legend()
+        # plt.grid(True)
+        # plt.pause(0.1)
 
 
 if __name__ == "__main__":
