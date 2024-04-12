@@ -7,6 +7,7 @@ from sklearn.cluster import KMeans
 from datetime import datetime
 import constant
 import ast
+import time
 
 class CameraCalibrator:
     def __init__(self):
@@ -55,7 +56,7 @@ class ColorDetector:
         self.upper_red2 = np.array([179, 255, 255])
         self.lower_green = np.array([30, 50, 100])
         self.upper_green = np.array([90, 255, 255])
-        self.lower_blue = np.array([90, 75, 100])
+        self.lower_blue = np.array([90, 70, 100])
         self.upper_blue = np.array([140, 255, 255])
 
         self.kernel = np.ones((5, 5), np.uint8)
@@ -230,6 +231,7 @@ class ColorDetector:
             key = cv2.waitKey(1) & 0xFF
             if key == 27:
                 break
+            time.sleep(0.1)
 
         cv2.destroyAllWindows()
         
