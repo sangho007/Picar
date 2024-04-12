@@ -416,7 +416,6 @@ def main():
         delta = PI_yaw.control(yaw_err)
 
         move.move(speed)
-        # print(servo_tick)
         servo.angle_control(delta)
         
 
