@@ -410,7 +410,6 @@ def main():
     traj_ego_y = []
     
     while getDistance([color_detector.ego_x, color_detector.ego_y], goal) > 1:
-        color_detector.ego_x
         target_point = traj.getTargetPoint([color_detector.ego_x, color_detector.ego_y])
 
         # use PID to control the vehicle
@@ -428,7 +427,6 @@ def main():
 
         move.move(speed)
         servo.angle_control(delta)
-        
 
         # move the vehicle
         ego.update(speed, delta)
@@ -436,7 +434,7 @@ def main():
         # store the trajectory
         traj_ego_x.append(color_detector.ego_x)
         traj_ego_y.append(color_detector.ego_y)
-        time.sleep(0.3)
+        time.sleep(0.5)
         
     # while getDistance([ego.x, ego.y], goal) > 1:
     #     color_detector.ego_x
