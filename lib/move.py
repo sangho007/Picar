@@ -70,4 +70,5 @@ class ServoMotor:
         # angle: -pi/2 ~ pi/2 (in radians)
         angle = np.clip(angle, -self.MAX_ANGLE, self.MAX_ANGLE)
         servo_tick = int((angle + self.MAX_ANGLE) * (self.LEFT_MAX - self.RIGHT_MAX) / (2 * self.MAX_ANGLE) + self.RIGHT_MAX)
+        print("servo_tick = ",servo_tick)
         self.pwm.set_pwm(3, 0, servo_tick)
