@@ -3,18 +3,13 @@ import RPi.GPIO as GPIO
 import numpy as np
 
 
-class VehicleMove:
+class DCMotor:
     def __init__(self):
-        self.Motor_B_EN = 4
-        self.Motor_B_Pin1 = 14
-        self.Motor_B_Pin2 = 15
         self.Motor_A_EN = 17
         self.Motor_A_Pin1 = 27
         self.Motor_A_Pin2 = 18
         self.pwm_A = None
-        self.pwm = PCA9685()
         self.HERTZ = 50
-        self.servo_tick = 300
 
     def setup(self):
         # Motor initialization
@@ -26,8 +21,6 @@ class VehicleMove:
         self.pwm_A = GPIO.PWM(self.Motor_A_EN, self.HERTZ)
         self.pwm_A.start(0)
         self.motorStop()
-        self.pwm.set_pwm_freq(self.HERTZ)
-        self.pwm.set_pwm(0, 0, self.servo_tick)
 
     def motorStop(self):
         # Motor stops
@@ -59,15 +52,22 @@ class VehicleMove:
             speed = 0
         self.pwm_A.ChangeDutyCycle(speed)
 
-    def angle_control(self, servo_tick):
-        self.pwm.set_pwm(0, 0, servo_tick)
 
-    def yaw_controll(self, error):
-        RIGHT_MAX = 230
-        LEFT_MAX = 370
-        MAX_ERROR = np.pi
-        self.servo_tick = (-error + MAX_ERROR) * (LEFT_MAX - RIGHT_MAX) / (MAX_ERROR - (-MAX_ERROR)) + RIGHT_MAX
+class ServoMotor:
+    def __init__(self):
+        self.pwm = PCA9685()
+        self.HERTZ = 50
+        self.RIGHT_MAX = 230
+        self.LEFT_MAX = 370
+        self.CENTER = (self.LEFT_MAX + self.RIGHT_MAX) // 2
+        self.MAX_ANGLE = np.pi / 2  # 90 degrees in radians
 
-        self.servo_tick = min(max(self.servo_tick, RIGHT_MAX), LEFT_MAX)
+    def setup(self):
+        self.pwm.set_pwm_freq(self.HERTZ)
+        self.pwm.set_pwm(3, 0, self.CENTER)
 
-        self.servo_tick = int(self.servo_tick)
+    def angle_control(self, angle):
+        # angle: -pi/2 ~ pi/2 (in radians)
+        angle = np.clip(angle, -self.MAX_ANGLE, self.MAX_ANGLE)
+        servo_tick = int((angle + self.MAX_ANGLE) * (self.LEFT_MAX - self.RIGHT_MAX) / (2 * self.MAX_ANGLE) + self.RIGHT_MAX)
+        self.pwm.set_pwm(3, 0, servo_tick)

@@ -1,7 +1,7 @@
 import math
 import matplotlib.pyplot as plt
 import numpy as np
-from move import VehicleMove
+from move import DCMotor,ServoMotor
 
 
 L = 5  # look ahead distance
@@ -212,8 +212,11 @@ def main():
     # create vehicle
     ego = Vehicle(20, 75, 0)
     
-    move = VehicleMove()
+    move = DCMotor()
     move.setup()
+    servo = ServoMotor()
+    servo.setup()
+    
 
     # target velocity
     target_vel = 20
@@ -411,9 +414,9 @@ def main():
         delta = PI_yaw.control(yaw_err)
 
         move.move(acc)
-        move.yaw_controll(delta)
         print(move.servo_tick)
-        move.angle_control(move.servo_tick)
+        servo.angle_control(delta)
+        
 
         # move the vehicle
         ego.update(acc, delta)
