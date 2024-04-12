@@ -2,6 +2,7 @@ from Adafruit_PCA9685 import PCA9685
 import RPi.GPIO as GPIO
 import numpy as np
 
+
 class VehicleMove:
     def __init__(self):
         self.Motor_B_EN = 4
@@ -27,7 +28,7 @@ class VehicleMove:
         self.motorStop()
         self.pwm.set_pwm_freq(self.HERTZ)
         self.pwm.set_pwm(0, 0, self.servo_tick)
-        
+
     def motorStop(self):
         # Motor stops
         GPIO.output(self.Motor_A_Pin1, GPIO.LOW)
@@ -41,32 +42,32 @@ class VehicleMove:
 
     def move(self, speed):
         # speed = 0~100
-        if speed < 0:  #'backward':
-            GPIO.output(self.Motor_A_Pin1, GPIO.HIGH)
-            GPIO.output(self.Motor_A_Pin2, GPIO.LOW)
-            speed = -speed
-        elif speed > 0: #'forward':
+        if speed < 0:  # 'backward':
             GPIO.output(self.Motor_A_Pin1, GPIO.LOW)
             GPIO.output(self.Motor_A_Pin2, GPIO.HIGH)
+            speed = -speed
+        elif speed > 0:  # 'forward':
+            GPIO.output(self.Motor_A_Pin1, GPIO.HIGH)
+            GPIO.output(self.Motor_A_Pin2, GPIO.LOW)
         else:
             self.motorStop()
             return
-        
+
         if speed > 100:
             speed = 100
         elif speed < 0:
             speed = 0
         self.pwm_A.ChangeDutyCycle(speed)
 
-    def angle_control(self,servo_tick):
+    def angle_control(self, servo_tick):
         self.pwm.set_pwm(0, 0, servo_tick)
-        
-    def yaw_controll(self,error):
+
+    def yaw_controll(self, error):
         RIGHT_MAX = 230
         LEFT_MAX = 370
         MAX_ERROR = np.pi
         self.servo_tick = (-error + MAX_ERROR) * (LEFT_MAX - RIGHT_MAX) / (MAX_ERROR - (-MAX_ERROR)) + RIGHT_MAX
-        
+
         self.servo_tick = min(max(self.servo_tick, RIGHT_MAX), LEFT_MAX)
-        
+
         self.servo_tick = int(self.servo_tick)
