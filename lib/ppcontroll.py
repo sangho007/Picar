@@ -2,6 +2,7 @@ import math
 import matplotlib.pyplot as plt
 import numpy as np
 from move import DCMotor,ServoMotor
+import time 
 
 
 L = 5  # look ahead distance
@@ -403,6 +404,7 @@ def main():
 
         # use PID to control the vehicle
         vel_err = target_vel - ego.vel
+        speed = vel_err
 
         yaw_err = math.atan2(target_point[1] - ego.y, target_point[0] - ego.x) - ego.yaw
         if yaw_err < 0 and ego.yaw > 0:
@@ -410,20 +412,21 @@ def main():
             ego.yaw = -ego.yaw
             yaw_err = math.atan2(target_point[1] - ego.y, target_point[0] - ego.x) - ego.yaw
         # acc = PI_acc.control(vel_err)
-        acc = 50
+       
         delta = PI_yaw.control(yaw_err)
 
-        move.move(acc)
+        move.move(speed)
         # print(servo_tick)
         servo.angle_control(delta)
         
 
         # move the vehicle
-        ego.update(acc, delta)
+        ego.update(speed, delta)
 
         # store the trajectory
         traj_ego_x.append(ego.x)
         traj_ego_y.append(ego.y)
+        time.sleep(0.3)
 
         
 
