@@ -1,4 +1,3 @@
-from PID import PD_Controller
 from Adafruit_PCA9685 import PCA9685
 import RPi.GPIO as GPIO
 import numpy as np
