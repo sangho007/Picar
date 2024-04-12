@@ -55,8 +55,8 @@ class ColorDetector:
         self.upper_red2 = np.array([179, 255, 255])
         self.lower_green = np.array([30, 50, 100])
         self.upper_green = np.array([90, 255, 255])
-        self.lower_blue = np.array([100, 80, 100])
-        self.upper_blue = np.array([130, 255, 255])
+        self.lower_blue = np.array([90, 75, 100])
+        self.upper_blue = np.array([140, 255, 255])
 
         self.kernel = np.ones((5, 5), np.uint8)
         
