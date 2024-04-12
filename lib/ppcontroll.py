@@ -224,7 +224,7 @@ def main():
     servo.setup()
     
     # colotdetector init 
-    color_detector = ColorDetector()
+    color_detector = ColorDetector("192.168.0.5","pi","raspberry")
     
     t_color_detect = threading.Thread(target=color_detector.detect_colors)
     t_color_detect.daemon = True
