@@ -229,6 +229,9 @@ def main():
     t_color_detect = threading.Thread(target=color_detector.detect_colors)
     t_color_detect.daemon = True
     t_color_detect.start()
+    color_detector.ego_x = 0
+    color_detector.ego_y = 0
+    color_detector.ego_yaw = 0
     
     # target velocity
     target_vel = 20
