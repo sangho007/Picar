@@ -214,8 +214,6 @@ def main():
     
     move = VehicleMove()
     move.setup()
-    
-    # plotVehicle(ego.x, ego.y, ego.yaw)
 
     # target velocity
     target_vel = 20
@@ -408,7 +406,8 @@ def main():
             #후진 상황
             ego.yaw = -ego.yaw
             yaw_err = math.atan2(target_point[1] - ego.y, target_point[0] - ego.x) - ego.yaw
-        acc = PI_acc.control(vel_err)
+        # acc = PI_acc.control(vel_err)
+        acc = 50
         delta = PI_yaw.control(yaw_err)
 
         move.move(acc)
@@ -423,18 +422,7 @@ def main():
         traj_ego_x.append(ego.x)
         traj_ego_y.append(ego.y)
 
-        # # plots
-        # plt.cla()
-        # plt.plot(traj_x, traj_y, "-r", linewidth=5, label="course")
-        # plt.plot(traj_ego_x, traj_ego_y, "-b", linewidth=2, label="trajectory")
-        # plt.plot(target_point[0], target_point[1], "og", ms=5, label="target point")
-        # plotVehicle(ego.x, ego.y, ego.yaw, delta)
-        # plt.xlabel("x[m]")
-        # plt.ylabel("y[m]")
-        # plt.axis("equal")
-        # plt.legend()
-        # plt.grid(True)
-        # plt.pause(0.1)
+        
 
 
 if __name__ == "__main__":

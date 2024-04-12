@@ -27,6 +27,7 @@ class VehicleMove:
         self.motorStop()
         self.pwm.set_pwm_freq(self.HERTZ)
         self.pwm.set_pwm(0, 0, self.servo_tick)
+        
     def motorStop(self):
         # Motor stops
         GPIO.output(self.Motor_A_Pin1, GPIO.LOW)
@@ -43,6 +44,7 @@ class VehicleMove:
         if speed < 0:  #'backward':
             GPIO.output(self.Motor_A_Pin1, GPIO.HIGH)
             GPIO.output(self.Motor_A_Pin2, GPIO.LOW)
+            speed = -speed
         elif speed > 0: #'forward':
             GPIO.output(self.Motor_A_Pin1, GPIO.LOW)
             GPIO.output(self.Motor_A_Pin2, GPIO.HIGH)
@@ -56,8 +58,8 @@ class VehicleMove:
             speed = 0
         self.pwm_A.ChangeDutyCycle(speed)
 
-    def angle_control(self):
-        self.pwm.set_pwm(0, 0, self.servo_tick)
+    def angle_control(self,servo_tick):
+        self.pwm.set_pwm(0, 0, servo_tick)
         
     def yaw_controll(self,error):
         RIGHT_MAX = 230
