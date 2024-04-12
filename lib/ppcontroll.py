@@ -419,11 +419,11 @@ def main():
         vel_err = target_vel - ego.vel
         speed = vel_err
 
-        yaw_err = math.atan2(target_point[1] - color_detector.ego_y, target_point[0] - color_detector.ego_x) - color_detector.yaw
-        if yaw_err < 0 and color_detector.yaw > 0:
+        yaw_err = math.atan2(target_point[1] - color_detector.ego_y, target_point[0] - color_detector.ego_x) - color_detector.ego_yaw
+        if yaw_err < 0 and color_detector.ego_yaw > 0:
             #후진 상황
-            color_detector.yaw = -color_detector.yaw
-            yaw_err = math.atan2(target_point[1] - color_detector.ego_y, target_point[0] - color_detector.ego_x) - color_detector.yaw
+            color_detector.ego_yaw = -color_detector.ego_yaw
+            yaw_err = math.atan2(target_point[1] - color_detector.ego_y, target_point[0] - color_detector.ego_x) - color_detector.ego_yaw
         # acc = PI_acc.control(vel_err)
        
         delta = PI_yaw.control(yaw_err)
