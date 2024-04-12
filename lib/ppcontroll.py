@@ -209,7 +209,8 @@ class PI:
         self.Iterm += error * dt
 
         self.last_error = error
-        output = self.Pterm + self.ki * self.Iterm
+        # output = self.Pterm + self.ki * self.Iterm
+        output = self.Pterm 
         return output
 
 
